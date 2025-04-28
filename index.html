@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfect Prediction System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:disabled {
+            background-color: #cccccc;
+        }
+        #countdown {
+            font-size: 24px;
+            margin: 20px 0;
+            min-height: 36px;
+        }
+        #prediction, #result {
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+            min-height: 30px;
+        }
+        .hidden {
+            display: none;
+        }
+        .visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Perfect Prediction</h2>
+        <button id="startBtn">Start New Prediction</button>
+        
+        <div id="countdown" class="hidden"></div>
+        <div id="prediction" class="hidden"></div>
+        <div id="result" class="hidden"></div>
+    </div>
+
+    <script>
+        document.getElementById('startBtn').addEventListener('click', startPrediction);
+
+        function startPrediction() {
+            const startBtn = document.getElementById('startBtn');
+            const countdownEl = document.getElementById('countdown');
+            const predictionEl = document.getElementById('prediction');
+            const resultEl = document.getElementById('result');
+            
+            // Reset UI
+            startBtn.disabled = true;
+            countdownEl.classList.remove('hidden');
+            predictionEl.classList.add('hidden');
+            resultEl.classList.add('hidden');
+            countdownEl.textContent = `Countdown: 10s`;
+            
+            let seconds = 10;
+            let predictedOutcome = null;
+            
+            const countdownInterval = setInterval(() => {
+                seconds--;
+                countdownEl.textContent = `Countdown: ${seconds}s`;
+                
+                // At 5 seconds, show the "prediction"
+                if (seconds === 5) {
+                    // Generate random prediction (but store it to ensure match)
+                    predictedOutcome = Math.random() < 0.5 ? 'HEAD' : 'TAIL';
+                    predictionEl.textContent = `Prediction: ${predictedOutcome}`;
+                    predictionEl.classList.remove('hidden');
+                }
+                
+                // When countdown ends
+                if (seconds === 0) {
+                    clearInterval(countdownInterval);
+                    
+                    // Show the result (which matches the prediction)
+                    resultEl.textContent = `Result: ${predictedOutcome}`;
+                    resultEl.classList.remove('hidden');
+                    
+                    // Re-enable the button
+                    startBtn.disabled = false;
+                }
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
